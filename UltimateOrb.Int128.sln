@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27004.2005
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UltimateOrb.Int128", "UltimateOrb.Int128\UltimateOrb.Int128.csproj", "{6CFC132D-C29D-4704-A56D-E2B2E9909889}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6CFC132D-C29D-4704-A56D-E2B2E9909889}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CFC132D-C29D-4704-A56D-E2B2E9909889}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CFC132D-C29D-4704-A56D-E2B2E9909889}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CFC132D-C29D-4704-A56D-E2B2E9909889}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E755D5F3-7100-48AF-977A-B7E1778AB21F}
+	EndGlobalSection
+EndGlobal
