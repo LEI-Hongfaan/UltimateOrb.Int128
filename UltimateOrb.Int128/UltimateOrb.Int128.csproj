@@ -2,6 +2,34 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <RootNamespace>UltimateOrb</RootNamespace>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <Authors>LEI Hongfaan</Authors>
+    <Company>LEI Hongfaan</Company>
+    <Product>UltimateOrb Libraries</Product>
+    <Description>Provides Int128 and UInt128.</Description>
+    <Copyright>Copyright © 2017 LEI Hongfaan. Distributed under the MIT License.</Copyright>
+    <PackageLicenseUrl>https://github.com/LEI-Hongfaan/UltimateOrb.Int128/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/LEI-Hongfaan/UltimateOrb.Int128</PackageProjectUrl>
+    <PackageTags>Int128 UInt128 UltimateOrb</PackageTags>
+    <PackageReleaseNotes>This package does not include the test suite. See Project Site for more information.
+</PackageReleaseNotes>
+    <AssemblyVersion>1</AssemblyVersion>
+    <FileVersion>1</FileVersion>
+    <RepositoryUrl></RepositoryUrl>
   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <CheckForOverflowUnderflow>true</CheckForOverflowUnderflow>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="UltimateOrb.Mathematics.DoubleArithmetic.Core" Version="1.2.9" />
+  </ItemGroup>
 
 </Project>
