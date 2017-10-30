@@ -1453,6 +1453,20 @@ namespace UltimateOrb {
                 return new UInt128(result_lo_lo, result_lo_hi);
             }
         }
+
+        public static partial class BinaryNumerals {
+
+            [System.Runtime.ConstrainedExecution.ReliabilityContractAttribute(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)]
+            [System.Runtime.TargetedPatchingOptOutAttribute(null)]
+            [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+            [System.Diagnostics.Contracts.PureAttribute()]
+            public static UInt128 NextPermutation(UInt128 value) {
+                var lo = value.lo;
+                var hi = value.hi;
+                lo = MathEx.NextPermutation(lo, hi, out hi);
+                return new UInt128(lo, hi);
+            }
+        }
     }
 }
 

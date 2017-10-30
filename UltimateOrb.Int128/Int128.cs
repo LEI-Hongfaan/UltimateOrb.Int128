@@ -1418,6 +1418,20 @@ namespace UltimateOrb {
                 return new UInt128(result_lo_lo, result_lo_hi);
             }
         }
+
+        public static partial class BinaryNumerals {
+            
+            [System.Runtime.ConstrainedExecution.ReliabilityContractAttribute(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)]
+            [System.Runtime.TargetedPatchingOptOutAttribute(null)]
+            [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+            [System.Diagnostics.Contracts.PureAttribute()]
+            public static Int128 NextPermutation(Int128 value) {
+                var lo = value.lo;
+                var hi = unchecked((UInt64)value.hi);
+                lo = MathEx.NextPermutation(lo, hi, out hi);
+                return new Int128(lo, unchecked((Int64)hi));
+            }
+        }
     }
 }
 
