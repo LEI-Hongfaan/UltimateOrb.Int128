@@ -1467,6 +1467,167 @@ namespace UltimateOrb {
                 return new UInt128(lo, hi);
             }
         }
+
+        public static partial class EuclideanAlgorithm {
+
+            [System.CLSCompliantAttribute(false)]
+            [System.Runtime.ConstrainedExecution.ReliabilityContractAttribute(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)]
+            [System.Runtime.TargetedPatchingOptOutAttribute(null)]
+            [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+            [System.Diagnostics.Contracts.PureAttribute()]
+            public static UInt128 GreatestCommonDivisor(UInt128 first, UInt128 second) {
+                System.Diagnostics.Contracts.Contract.Ensures((System.Diagnostics.Contracts.Contract.Result<ulong>() == 0u) == (System.Diagnostics.Contracts.Contract.OldValue(first) == 0u && System.Diagnostics.Contracts.Contract.OldValue(second) == 0u));
+                System.Diagnostics.Contracts.Contract.Ensures(0u == System.Diagnostics.Contracts.Contract.Result<ulong>() || 0u == System.Diagnostics.Contracts.Contract.OldValue(first) % System.Diagnostics.Contracts.Contract.Result<ulong>());
+                System.Diagnostics.Contracts.Contract.Ensures(0u == System.Diagnostics.Contracts.Contract.Result<ulong>() || 0u == System.Diagnostics.Contracts.Contract.OldValue(second) % System.Diagnostics.Contracts.Contract.Result<ulong>());
+                unchecked {
+                    var first_lo = first.lo;
+                    var first_hi = first.hi;
+                    var second_lo = second.lo;
+                    var second_hi = second.hi;
+                    if (0 == second_lo && 0 == second_hi) {
+                        return first;
+                    }
+                    if (0 == first_lo && 0 == first_hi) {
+                        return second;
+                    }
+                    if (MathEx.GreaterThan(first_lo, first_hi, second_lo, second_hi)) {
+                        first_lo = MathEx.Remainder(first_lo, first_hi, second_lo, second_hi, out first_hi);
+                        if (0 == first_lo && 0 == first_hi) {
+                            return second;
+                        }
+                    } else {
+                        second_lo = MathEx.Remainder(second_lo, second_hi, first_lo, first_hi, out second_hi);
+                        if (0 == second_lo && 0 == second_hi) {
+                            return first;
+                        }
+                    }
+                    var c = 0;
+                    for (; 0 == (1 & first_lo) && 0 == (1 & second_lo); first_lo >>= 1, second_lo >>= 1) {
+                        unchecked {
+                            ++c;
+                        }
+                        if (64 == c) {
+                            for (; 0 == (1 & first_hi) && 0 == (1 & second_hi); first_hi >>= 1, second_hi >>= 1) {
+                                unchecked {
+                                    ++c;
+                                }
+                            }
+                            break;
+                        }
+                    }
+                    first_lo = GreatestCommonDivisorPartialStub0002(first_lo, first_hi, second_lo, second_hi, out first_hi);
+                    first_lo = MathEx.ShiftLeft(first_lo, first_hi, c, out first_hi);
+                    return new UInt128(first_lo, first_hi);
+                }
+            }
+
+            [System.Runtime.ConstrainedExecution.ReliabilityContractAttribute(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.MayFail)]
+            [System.Runtime.TargetedPatchingOptOutAttribute(null)]
+            [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+            [System.Diagnostics.Contracts.PureAttribute()]
+            internal static ulong GreatestCommonDivisorPartialStub0001(ulong first_lo, ulong first_hi, ulong second_lo, ulong second_hi, out ulong result_hi) {
+                System.Diagnostics.Contracts.Contract.Requires(0 != (1 & second_lo) && (second_hi > 0 || second_lo > 1u));
+                unchecked {
+                    var first_lo_ = first_lo;
+                    var first_hi_ = first_hi;
+                    var second_lo_ = second_lo;
+                    var second_hi_ = second_hi;
+                    if (0 == first_lo_ && 0 == first_hi_) {
+                        result_hi = second_hi_;
+                        return second_lo_;
+                    }
+                    while (0 == (1 & first_lo_)) {
+                        first_lo_ = MathEx.ShiftRight(first_lo_, first_hi_, out first_hi_);
+                    }
+                    if (1 == first_lo_ && 0 == first_hi_) {
+                        result_hi = 0;
+                        return 1;
+                    }
+                    if (first_lo_ == second_lo_ && first_hi_ == second_hi_) {
+                        result_hi = second_hi_;
+                        return second_lo_;
+                    } else if (MathEx.GreaterThan(first_lo_, first_hi_, second_lo_, second_hi_)) {
+                        goto L_Gt;
+                    }
+                    L_Lt:;
+                    if (0 != (2 & (first_lo_ ^ second_lo_))) {
+                        var t_lo = first_lo_;
+                        var t_hi = first_hi_;
+                        t_lo = MathEx.ShiftRight(t_lo, t_hi, 2, out t_hi);
+                        second_lo_ = MathEx.ShiftRight(second_lo_, second_hi_, 2, out second_hi_);
+                        t_lo = MathEx.IncreaseUnchecked(t_lo, t_hi, out t_hi);
+                        second_lo_ = MathEx.AddUnchecked(second_lo_, second_hi_, t_lo, t_hi, out second_hi_);
+                    } else {
+                        second_lo_ = MathEx.SubtractUnchecked(second_lo_, second_hi_, first_lo_, first_hi_, out second_hi_);
+                        second_lo_ = MathEx.ShiftRight(second_lo_, second_hi_, 2, out second_hi_);
+                    }
+                    while (0 == (1 & second_lo_)) {
+                        second_lo_ = MathEx.ShiftRight(second_lo_, second_hi_, out second_hi_);
+                    }
+                    if (1 == second_lo_ && 0 == second_hi_) {
+                        result_hi = 0;
+                        return 1;
+                    }
+                    if (first_lo_ == second_lo_ && first_hi_ == second_hi_) {
+                        result_hi = second_hi_;
+                        return second_lo_;
+                    } else if (MathEx.GreaterThan(second_lo_, second_hi_, first_lo_, first_hi_)) {
+                        goto L_Lt;
+                    }
+                    L_Gt:;
+                    if (0 != (2 & (first_lo_ ^ second_lo_))) {
+                        var t_lo = second_lo_;
+                        var t_hi = second_hi_;
+                        t_lo = MathEx.ShiftRight(t_lo, t_hi, 2, out t_hi);
+                        first_lo_ = MathEx.ShiftRight(first_lo_, first_hi_, 2, out first_hi_);
+                        t_lo = MathEx.IncreaseUnchecked(t_lo, t_hi, out t_hi);
+                        first_lo_ = MathEx.AddUnchecked(first_lo_, first_hi_, t_lo, t_hi, out first_hi_);
+                    } else {
+                        first_lo_ = MathEx.SubtractUnchecked(first_lo_, first_hi_, second_lo_, second_hi_, out first_hi_);
+                        first_lo_ = MathEx.ShiftRight(first_hi_, first_hi_, 2, out first_hi_);
+                    }
+                    while (0 == (1 & first_lo_)) {
+                        first_lo_ = MathEx.ShiftRight(first_lo_, first_hi_, out first_hi_);
+                    }
+                    if (1 == first_lo_ && 0 == first_hi_) {
+                        result_hi = 0;
+                        return 1;
+                    }
+                    if (first_lo_ == second_lo_ && first_hi_ == second_hi_) {
+                        result_hi = second_hi_;
+                        return second_lo_;
+                    } else if (MathEx.GreaterThan(first_lo_, first_hi_, second_lo_, second_hi_)) {
+                        goto L_Gt;
+                    }
+                    goto L_Lt;
+                }
+            }
+
+            [System.Runtime.ConstrainedExecution.ReliabilityContractAttribute(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.MayFail)]
+            [System.Runtime.TargetedPatchingOptOutAttribute(null)]
+            [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+            [System.Diagnostics.Contracts.PureAttribute()]
+            internal static ulong GreatestCommonDivisorPartialStub0002(ulong first_lo, ulong first_hi, ulong second_lo, ulong second_hi, out ulong result_hi) {
+                System.Diagnostics.Contracts.Contract.Requires(0 != (1 & first_lo) || 0 != (1 & second_lo));
+                unchecked {
+                    if (0 != (1 & second_lo)) {
+                        if (1 == first_lo && 0 == first_hi || 1 == second_lo && 0 == second_hi) {
+                            result_hi = 0;
+                            return 1;
+                        } else {
+                            return GreatestCommonDivisorPartialStub0001(first_lo, first_hi, second_lo, second_hi, out result_hi);
+                        }
+                    } else {
+                        if (1 == first_lo && 0 == first_hi) {
+                            result_hi = 0;
+                            return 1;
+                        } else {
+                            return GreatestCommonDivisorPartialStub0001(second_lo, second_hi, first_lo, first_hi, out result_hi);
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
