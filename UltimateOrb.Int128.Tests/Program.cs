@@ -1,12 +1,10 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Xunit;
-using FsCheck;
-using FsCheck.Xunit;
+﻿using FsCheck.Xunit;
+using System;
 
 namespace UltimateOrb.Int128.Tests {
 
-    public class UnitTests {
+    public class Program {
+
         public static System.Numerics.BigInteger Int64ArrayToBigInteger(params Int64[] bits) {
             var c = bits.Length;
             if (c > 1) {
@@ -45,7 +43,7 @@ namespace UltimateOrb.Int128.Tests {
             return Int64ArrayToBigIntegerUnsigned(((object)bits) as Int64[]);
         }
 
-        [Property]
+        [Property(MaxTest = 100, QuietOnSuccess = true)]
         public bool Test_GCD_1(Tuple<ulong, ulong, ulong, ulong> a) {
             var m0 = a.Item1;
             var m1 = a.Item2;

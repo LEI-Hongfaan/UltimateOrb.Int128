@@ -1502,18 +1502,12 @@ namespace UltimateOrb {
                         }
                     }
                     var c = 0;
-                    for (; 0 == (1 & first_lo) && 0 == (1 & second_lo); first_lo >>= 1, second_lo >>= 1) {
+                    for (; 0 == (1 & unchecked((uint)first_lo | (uint)second_lo)); ) {
                         unchecked {
                             ++c;
                         }
-                        if (64 == c) {
-                            for (; 0 == (1 & first_hi) && 0 == (1 & second_hi); first_hi >>= 1, second_hi >>= 1) {
-                                unchecked {
-                                    ++c;
-                                }
-                            }
-                            break;
-                        }
+                        first_lo = MathEx.ShiftRight(first_lo, first_hi, out first_hi);
+                        second_lo = MathEx.ShiftRight(second_lo, second_hi, out second_hi);
                     }
                     first_lo = GreatestCommonDivisorPartialStub0002(first_lo, first_hi, second_lo, second_hi, out first_hi);
                     first_lo = MathEx.ShiftLeft(first_lo, first_hi, c, out first_hi);
@@ -1550,7 +1544,7 @@ namespace UltimateOrb {
                         goto L_Gt;
                     }
                     L_Lt:;
-                    if (0 != (2 & (first_lo_ ^ second_lo_))) {
+                    if (0 != (2 & ((uint)first_lo_ ^ (uint)second_lo_))) {
                         var t_lo = first_lo_;
                         var t_hi = first_hi_;
                         t_lo = MathEx.ShiftRight(t_lo, t_hi, 2, out t_hi);
@@ -1575,7 +1569,7 @@ namespace UltimateOrb {
                         goto L_Lt;
                     }
                     L_Gt:;
-                    if (0 != (2 & (first_lo_ ^ second_lo_))) {
+                    if (0 != (2 & ((uint)first_lo_ ^ (uint)second_lo_))) {
                         var t_lo = second_lo_;
                         var t_hi = second_hi_;
                         t_lo = MathEx.ShiftRight(t_lo, t_hi, 2, out t_hi);
@@ -1584,7 +1578,7 @@ namespace UltimateOrb {
                         first_lo_ = MathEx.AddUnchecked(first_lo_, first_hi_, t_lo, t_hi, out first_hi_);
                     } else {
                         first_lo_ = MathEx.SubtractUnchecked(first_lo_, first_hi_, second_lo_, second_hi_, out first_hi_);
-                        first_lo_ = MathEx.ShiftRight(first_hi_, first_hi_, 2, out first_hi_);
+                        first_lo_ = MathEx.ShiftRight(first_lo_, first_hi_, 2, out first_hi_);
                     }
                     while (0 == (1 & first_lo_)) {
                         first_lo_ = MathEx.ShiftRight(first_lo_, first_hi_, out first_hi_);
@@ -1611,7 +1605,7 @@ namespace UltimateOrb {
                 System.Diagnostics.Contracts.Contract.Requires(0 != (1 & first_lo) || 0 != (1 & second_lo));
                 unchecked {
                     if (0 != (1 & second_lo)) {
-                        if (1 == first_lo && 0 == first_hi || 1 == second_lo && 0 == second_hi) {
+                        if ((1 == first_lo && 0 == first_hi) || (1 == second_lo && 0 == second_hi)) {
                             result_hi = 0;
                             return 1;
                         } else {

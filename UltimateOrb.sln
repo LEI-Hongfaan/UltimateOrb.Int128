@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UltimateOrb.Int128", "UltimateOrb.Int128\UltimateOrb.Int128.csproj", "{6CFC132D-C29D-4704-A56D-E2B2E9909889}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UltimateOrb.Int128", "UltimateOrb.Int128\UltimateOrb.Int128.csproj", "{6CFC132D-C29D-4704-A56D-E2B2E9909889}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UltimateOrb.Int128.Tests", "UltimateOrb.Int128.Tests\UltimateOrb.Int128.Tests.csproj", "{C07CBFDD-4476-425A-8FFC-71975AA0BCF2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UltimateOrb.Int128.Tests", "UltimateOrb.Int128.Tests\UltimateOrb.Int128.Tests.csproj", "{49FAFFAB-B410-42FA-804B-11443C729E55}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{6CFC132D-C29D-4704-A56D-E2B2E9909889}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6CFC132D-C29D-4704-A56D-E2B2E9909889}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6CFC132D-C29D-4704-A56D-E2B2E9909889}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C07CBFDD-4476-425A-8FFC-71975AA0BCF2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C07CBFDD-4476-425A-8FFC-71975AA0BCF2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C07CBFDD-4476-425A-8FFC-71975AA0BCF2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C07CBFDD-4476-425A-8FFC-71975AA0BCF2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49FAFFAB-B410-42FA-804B-11443C729E55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49FAFFAB-B410-42FA-804B-11443C729E55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49FAFFAB-B410-42FA-804B-11443C729E55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49FAFFAB-B410-42FA-804B-11443C729E55}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
