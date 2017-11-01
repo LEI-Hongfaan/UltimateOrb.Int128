@@ -43,7 +43,7 @@ namespace UltimateOrb.Int128.Tests {
             return Int64ArrayToBigIntegerUnsigned(((object)bits) as Int64[]);
         }
 
-        [Property(MaxTest = 100, QuietOnSuccess = true)]
+        [Property(MaxTest = 300000, QuietOnSuccess = true)]
         public bool Test_GCD_1(Tuple<ulong, ulong, ulong, ulong> a) {
             var m0 = a.Item1;
             var m1 = a.Item2;
