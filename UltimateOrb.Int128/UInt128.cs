@@ -1622,6 +1622,153 @@ namespace UltimateOrb {
                 }
             }
         }
+
+        public static partial class ZZOverNZZModule {
+
+            [System.CLSCompliantAttribute(false)]
+            [System.Runtime.ConstrainedExecution.ReliabilityContractAttribute(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)]
+            [System.Runtime.TargetedPatchingOptOutAttribute(null)]
+            [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+            [System.Diagnostics.Contracts.PureAttribute()]
+            public static UInt128 Sum(UInt128 n, UInt128 first, UInt128 second) {
+                System.Diagnostics.Contracts.Contract.Requires(n > first);
+                System.Diagnostics.Contracts.Contract.Requires(n > second);
+                System.Diagnostics.Contracts.Contract.Ensures(System.Diagnostics.Contracts.Contract.OldValue(n) > System.Diagnostics.Contracts.Contract.Result<UInt128>());
+                return unchecked(n <= (second = (first + second)) || first > second ? second - n : second);
+            }
+
+            [System.CLSCompliantAttribute(false)]
+            [System.Runtime.ConstrainedExecution.ReliabilityContractAttribute(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)]
+            [System.Runtime.TargetedPatchingOptOutAttribute(null)]
+            [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+            [System.Diagnostics.Contracts.PureAttribute()]
+            public static UInt128 Double(UInt128 n, UInt128 value) {
+                System.Diagnostics.Contracts.Contract.Requires(n > value);
+                System.Diagnostics.Contracts.Contract.Ensures(System.Diagnostics.Contracts.Contract.OldValue(n) > System.Diagnostics.Contracts.Contract.Result<UInt128>());
+                return Sum(n, value, value);
+            }
+
+            [System.CLSCompliantAttribute(false)]
+            [System.Runtime.ConstrainedExecution.ReliabilityContractAttribute(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)]
+            [System.Runtime.TargetedPatchingOptOutAttribute(null)]
+            [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+            [System.Diagnostics.Contracts.PureAttribute()]
+            public static UInt128 Difference(UInt128 n, UInt128 first, UInt128 second) {
+                System.Diagnostics.Contracts.Contract.Requires(n > first);
+                System.Diagnostics.Contracts.Contract.Requires(n > second);
+                System.Diagnostics.Contracts.Contract.Ensures(System.Diagnostics.Contracts.Contract.OldValue(n) > System.Diagnostics.Contracts.Contract.Result<UInt128>());
+                return unchecked(second > first ? first - second + n : first - second);
+            }
+
+            [System.CLSCompliantAttribute(false)]
+            [System.Runtime.ConstrainedExecution.ReliabilityContractAttribute(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)]
+            [System.Runtime.TargetedPatchingOptOutAttribute(null)]
+            [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+            [System.Diagnostics.Contracts.PureAttribute()]
+            public static UInt128 Opposite(UInt128 n, UInt128 value) {
+                System.Diagnostics.Contracts.Contract.Requires(n > value);
+                System.Diagnostics.Contracts.Contract.Ensures(System.Diagnostics.Contracts.Contract.OldValue(n) > System.Diagnostics.Contracts.Contract.Result<UInt128>());
+                return Difference(n, 0u, value);
+            }
+            
+            [System.CLSCompliantAttribute(false)]
+            [System.Runtime.ConstrainedExecution.ReliabilityContractAttribute(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)]
+            [System.Runtime.TargetedPatchingOptOutAttribute(null)]
+            [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+            [System.Diagnostics.Contracts.PureAttribute()]
+            public static UInt128 Product(UInt128 n, UInt128 first, UInt128 second) {
+                System.Diagnostics.Contracts.Contract.Requires(n > first);
+                System.Diagnostics.Contracts.Contract.Requires(n > second);
+                System.Diagnostics.Contracts.Contract.Ensures(System.Diagnostics.Contracts.Contract.OldValue(n) > System.Diagnostics.Contracts.Contract.Result<UInt128>());
+                var p_lo_lo = UltimateOrb.Mathematics.DoubleArithmetic.BigMul(first.lo, first.hi, second.lo, second.hi, out var p_lo_hi, out var p_hi_lo, out var p_hi_hi);
+                var lo = UltimateOrb.Mathematics.DoubleArithmetic.BigRemNoThrow(p_lo_lo, p_lo_hi, p_hi_lo, p_hi_hi, n.lo, n.hi, out var hi);
+                return new UInt128(lo, hi);
+            }
+
+            [System.CLSCompliantAttribute(false)]
+            [System.Runtime.ConstrainedExecution.ReliabilityContractAttribute(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)]
+            [System.Runtime.TargetedPatchingOptOutAttribute(null)]
+            [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+            [System.Diagnostics.Contracts.PureAttribute()]
+            public static UInt128 Square(UInt128 n, UInt128 value) {
+                System.Diagnostics.Contracts.Contract.Requires(n > value);
+                System.Diagnostics.Contracts.Contract.Ensures(System.Diagnostics.Contracts.Contract.OldValue(n) > System.Diagnostics.Contracts.Contract.Result<UInt128>());
+                // TODO: BigMul -> BigSquare
+                return Product(n, value, value);
+            }
+
+            [System.CLSCompliantAttribute(false)]
+            [System.Runtime.ConstrainedExecution.ReliabilityContractAttribute(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)]
+            [System.Runtime.TargetedPatchingOptOutAttribute(null)]
+            [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+            [System.Diagnostics.Contracts.PureAttribute()]
+            public static UInt128 Power(UInt128 n, UInt128 @base, uint exponent) {
+                System.Diagnostics.Contracts.Contract.Requires(n > @base);
+                System.Diagnostics.Contracts.Contract.Ensures(System.Diagnostics.Contracts.Contract.OldValue(n) > System.Diagnostics.Contracts.Contract.Result<UInt128>());
+                UInt128 j = 0u;
+                if (n != 1u) {
+                    j = 1u;
+                }
+                for (; ; ) {
+                    if (0u != (exponent & 1u)) {
+                        j = Product(n, @base, j);
+                    }
+                    if (0u == (exponent >>= 1)) {
+                        break;
+                    }
+                    @base = Square(n, @base);
+                }
+                return j;
+            }
+
+            [System.CLSCompliantAttribute(false)]
+            [System.Runtime.ConstrainedExecution.ReliabilityContractAttribute(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)]
+            [System.Runtime.TargetedPatchingOptOutAttribute(null)]
+            [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+            [System.Diagnostics.Contracts.PureAttribute()]
+            public static UInt128 Power(UInt128 n, UInt128 @base, ulong exponent) {
+                System.Diagnostics.Contracts.Contract.Requires(n > @base);
+                System.Diagnostics.Contracts.Contract.Ensures(System.Diagnostics.Contracts.Contract.OldValue(n) > System.Diagnostics.Contracts.Contract.Result<UInt128>());
+                UInt128 j = 0u;
+                if (n != 1u) {
+                    j = 1u;
+                }
+                for (; ; ) {
+                    if (0u != (exponent & 1u)) {
+                        j = Product(n, @base, j);
+                    }
+                    if (0u == (exponent >>= 1)) {
+                        break;
+                    }
+                    @base = Square(n, @base);
+                }
+                return j;
+            }
+
+            [System.CLSCompliantAttribute(false)]
+            [System.Runtime.ConstrainedExecution.ReliabilityContractAttribute(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)]
+            [System.Runtime.TargetedPatchingOptOutAttribute(null)]
+            [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+            [System.Diagnostics.Contracts.PureAttribute()]
+            public static UInt128 Power(UInt128 n, UInt128 @base, UInt128 exponent) {
+                System.Diagnostics.Contracts.Contract.Requires(n > @base);
+                System.Diagnostics.Contracts.Contract.Ensures(System.Diagnostics.Contracts.Contract.OldValue(n) > System.Diagnostics.Contracts.Contract.Result<UInt128>());
+                UInt128 j = 0u;
+                if (n != 1u) {
+                    j = 1u;
+                }
+                for (; ; ) {
+                    if (0u != (exponent & 1u)) {
+                        j = Product(n, @base, j);
+                    }
+                    if (0u == (exponent >>= 1)) {
+                        break;
+                    }
+                    @base = Square(n, @base);
+                }
+                return j;
+            }
+        }
     }
 }
 

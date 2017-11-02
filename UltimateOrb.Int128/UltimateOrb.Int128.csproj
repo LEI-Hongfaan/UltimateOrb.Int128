@@ -33,7 +33,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="UltimateOrb.Mathematics.DoubleArithmetic.Core" Version="1.2.9" />
+    <PackageReference Include="UltimateOrb.Mathematics.DoubleArithmetic.Core" Version="1.2.10" />
   </ItemGroup>
 
 </Project>
