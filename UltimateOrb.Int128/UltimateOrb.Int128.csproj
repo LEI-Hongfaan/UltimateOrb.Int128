@@ -19,7 +19,7 @@
     <AssemblyVersion>1</AssemblyVersion>
     <FileVersion>1</FileVersion>
     <RepositoryUrl></RepositoryUrl>
-    <Version>1.0.4</Version>
+    <Version>1.0.5</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -33,7 +33,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="UltimateOrb.Mathematics.DoubleArithmetic.Core" Version="1.2.10" />
+    <PackageReference Include="UltimateOrb.Mathematics.DoubleArithmetic.Core" Version="1.2.11" />
   </ItemGroup>
 
 </Project>

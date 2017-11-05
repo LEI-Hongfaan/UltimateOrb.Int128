@@ -34,7 +34,7 @@ namespace UltimateOrb.Int128.Tests {
                 return a;
             }
             if (1 == c) {
-                return bits[0];
+                return unchecked((UInt64)bits[0]);
             }
             return default(System.Numerics.BigInteger);
         }
@@ -59,6 +59,36 @@ namespace UltimateOrb.Int128.Tests {
             var p = System.Numerics.BigInteger.GreatestCommonDivisor(m, n);
             var d = UInt64ArrayToBigIntegerUnsigned(unchecked((ulong)dd.LoInt64Bits), unchecked((ulong)dd.HiInt64Bits));
             return p == d;
+        }
+
+        [Property(MaxTest = 300000, QuietOnSuccess = true)]
+        public bool Test_ModPow_1(Tuple<ulong, ulong, ulong, ulong, ulong, ulong> a) {
+            var n0 = a.Item1;
+            var n1 = a.Item2;
+            var b0 = a.Item3;
+            var b1 = a.Item4;
+            var e0 = a.Item5;
+            var e1 = a.Item6;
+
+            var n = UInt64ArrayToBigIntegerUnsigned(n0, n1);
+            var b = UInt64ArrayToBigIntegerUnsigned(b0, b1);
+            if (!(n > b)) {
+                return true;
+            }
+
+            var e = UInt64ArrayToBigIntegerUnsigned(e0, e1);
+            var p0 = System.Numerics.BigInteger.ModPow(b, e, n);
+
+            var nn = UInt128.FromBits(n0, n1);
+            var bb = UInt128.FromBits(b0, b1);
+            var ee = UInt128.FromBits(e0, e1);
+            var p1p = UInt128.ZZOverNZZModule.Power(nn, bb, ee);
+
+            var p1 = UInt64ArrayToBigIntegerUnsigned(unchecked((ulong)p1p.LoInt64Bits), unchecked((ulong)p1p.HiInt64Bits));
+            if (p0 == p1) {
+                return true;
+            }
+            return false;
         }
     }
 }

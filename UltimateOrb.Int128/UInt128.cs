@@ -1502,7 +1502,7 @@ namespace UltimateOrb {
                         }
                     }
                     var c = 0;
-                    for (; 0 == (1 & unchecked((uint)first_lo | (uint)second_lo)); ) {
+                    for (; 0 == (1 & unchecked((uint)first_lo | (uint)second_lo));) {
                         unchecked {
                             ++c;
                         }
@@ -1670,7 +1670,7 @@ namespace UltimateOrb {
                 System.Diagnostics.Contracts.Contract.Ensures(System.Diagnostics.Contracts.Contract.OldValue(n) > System.Diagnostics.Contracts.Contract.Result<UInt128>());
                 return Difference(n, 0u, value);
             }
-            
+
             [System.CLSCompliantAttribute(false)]
             [System.Runtime.ConstrainedExecution.ReliabilityContractAttribute(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)]
             [System.Runtime.TargetedPatchingOptOutAttribute(null)]
