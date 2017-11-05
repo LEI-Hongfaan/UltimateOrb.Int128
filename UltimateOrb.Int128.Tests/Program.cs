@@ -44,11 +44,7 @@ namespace UltimateOrb.Int128.Tests {
         }
 
         [Property(MaxTest = 300000, QuietOnSuccess = true)]
-        public bool Test_GCD_1(Tuple<ulong, ulong, ulong, ulong> a) {
-            var m0 = a.Item1;
-            var m1 = a.Item2;
-            var n0 = a.Item3;
-            var n1 = a.Item4;
+        public bool Test_GCD_1(ulong m0, ulong m1, ulong n0, ulong n1) {
             var mm = UInt128.FromBits(m0, m1);
             var nn = UInt128.FromBits(n0, n1);
             var dd = UInt128.EuclideanAlgorithm.GreatestCommonDivisor(mm, nn);
@@ -61,15 +57,8 @@ namespace UltimateOrb.Int128.Tests {
             return p == d;
         }
 
-        [Property(MaxTest = 300000, QuietOnSuccess = true)]
-        public bool Test_ModPow_1(Tuple<ulong, ulong, ulong, ulong, ulong, ulong> a) {
-            var n0 = a.Item1;
-            var n1 = a.Item2;
-            var b0 = a.Item3;
-            var b1 = a.Item4;
-            var e0 = a.Item5;
-            var e1 = a.Item6;
-
+        [Property(MaxTest = 250000, QuietOnSuccess = true)]
+        public bool Test_ModPow_1(ulong n0, ulong n1, ulong b0, ulong b1, ulong e0, ulong e1) {
             var n = UInt64ArrayToBigIntegerUnsigned(n0, n1);
             var b = UInt64ArrayToBigIntegerUnsigned(b0, b1);
             if (!(n > b)) {

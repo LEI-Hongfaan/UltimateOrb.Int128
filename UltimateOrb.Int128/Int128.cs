@@ -293,6 +293,20 @@ namespace UltimateOrb {
             }
         }
 
+        [System.Runtime.ConstrainedExecution.ReliabilityContractAttribute(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)]
+        [System.Runtime.TargetedPatchingOptOutAttribute(null)]
+        [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+        [System.Diagnostics.Contracts.PureAttribute()]
+        public static int TestBit(Int128 value, int index) {
+            if (0 <= index && 128 > index) {
+                if (index < 64) {
+                    return 1 & unchecked((int)(value.lo >> index));
+                }
+                return 1 & unchecked((int)(value.hi >> index));
+            }
+            return 0;
+        }
+
         #region Bitwise operations
         [System.Runtime.ConstrainedExecution.ReliabilityContractAttribute(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)]
         [System.Runtime.TargetedPatchingOptOutAttribute(null)]
