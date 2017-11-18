@@ -1707,8 +1707,9 @@ namespace UltimateOrb {
             public static UInt128 Square(UInt128 n, UInt128 value) {
                 System.Diagnostics.Contracts.Contract.Requires(n > value);
                 System.Diagnostics.Contracts.Contract.Ensures(System.Diagnostics.Contracts.Contract.OldValue(n) > System.Diagnostics.Contracts.Contract.Result<UInt128>());
-                // TODO: BigMul -> BigSquare
-                return Product(n, value, value);
+                var p_lo_lo = UltimateOrb.Mathematics.DoubleArithmetic.BigSquare(value.lo, value.hi, out var p_lo_hi, out var p_hi_lo, out var p_hi_hi);
+                var lo = UltimateOrb.Mathematics.DoubleArithmetic.BigRemNoThrow(p_lo_lo, p_lo_hi, p_hi_lo, p_hi_hi, n.lo, n.hi, out var hi);
+                return new UInt128(lo, hi);
             }
 
             [System.CLSCompliantAttribute(false)]
