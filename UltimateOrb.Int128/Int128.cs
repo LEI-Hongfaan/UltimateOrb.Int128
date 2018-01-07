@@ -206,6 +206,19 @@ namespace UltimateOrb {
 
         [DebuggerBrowsable(DebuggerBrowsableState.Never)]
         [System.Diagnostics.Contracts.PureAttribute()]
+        public bool IsEven {
+
+            [System.Runtime.ConstrainedExecution.ReliabilityContractAttribute(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)]
+            [System.Runtime.TargetedPatchingOptOutAttribute(null)]
+            [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+            [System.Diagnostics.Contracts.PureAttribute()]
+            get {
+                return 0 == (this.lo & 1);
+            }
+        }
+
+        [DebuggerBrowsable(DebuggerBrowsableState.Never)]
+        [System.Diagnostics.Contracts.PureAttribute()]
         public bool IsNegative {
 
             [System.Runtime.ConstrainedExecution.ReliabilityContractAttribute(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)]
@@ -1434,7 +1447,7 @@ namespace UltimateOrb {
         }
 
         public static partial class BinaryNumerals {
-            
+
             [System.Runtime.ConstrainedExecution.ReliabilityContractAttribute(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.Success)]
             [System.Runtime.TargetedPatchingOptOutAttribute(null)]
             [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
