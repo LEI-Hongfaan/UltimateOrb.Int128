@@ -790,9 +790,13 @@ namespace UltimateOrb {
                     } else if (e < 0) {
                         var ol = (UInt64)0;
                         ol = MathEx.ShiftRight(ol, lo, unchecked(-e), out lo);
+                        // Do NOT uncomment. (int)3.5 == 3
+                        /*
+                        // IEEE Std 754-2008 roundTiesToEven
                         if (unchecked((UInt64)Int64.MinValue) < ol || (unchecked((UInt64)Int64.MinValue) == ol && 0 != (1 & lo))) {
                             lo = unchecked(1 + lo);
                         }
+                        */
                     }
                     if (0 > b) {
                         lo = MathEx.NegateUnchecked(lo, hi, out hi);
@@ -1795,6 +1799,61 @@ namespace UltimateOrb {
                     @base = Square(n, @base);
                 }
                 return j;
+            }
+        }
+
+        public static partial class Converter {
+
+            [System.CLSCompliantAttribute(false)]
+            [System.Runtime.ConstrainedExecution.ReliabilityContractAttribute(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.MayFail)]
+            [System.Runtime.TargetedPatchingOptOutAttribute(null)]
+            [System.Diagnostics.Contracts.PureAttribute()]
+            public static UInt128 ToUInt128(double value) {
+                const int BitSize = 64;
+                const int ExponentBitSize = 11;
+                const int ExponentBias = unchecked(checked((1 << (ExponentBitSize - 1))) - 1);
+                const int SignBitSize = 1;
+                const int FractionBitSize = checked(BitSize - SignBitSize - ExponentBitSize);
+
+                // const Int64 SignMask = unchecked((Int64)checked((Int64)1u << (ExponentBitSize + FractionBitSize)));
+                const Int64 ExponentMask = unchecked((Int64)checked((((Int64)1u << ExponentBitSize) - 1u) << FractionBitSize));
+                const Int64 FractionMask = unchecked((Int64)checked(((Int64)1u << FractionBitSize) - 1u));
+
+                var b = BitConverter.DoubleToInt64Bits(value);
+                var e = checked((int)(ExponentMask >> FractionBitSize)) & unchecked((int)(b >> FractionBitSize));
+                if (e >= checked(ExponentBias - 1)) {
+                    b.ThrowOnNegative();
+                    checked(checked(ExponentBias - 1 + 128) - e).Ignore();
+                    {
+                        e = unchecked(e - (FractionBitSize + ExponentBias));
+                        var lo = unchecked((UInt64)(((Int64)1 << FractionBitSize) | (FractionMask & b)));
+                        var hi = (UInt64)0;
+                        if (e > 0) {
+                            lo = MathEx.ShiftLeft(lo, hi, e, out hi);
+                        } else if (e < 0) {
+                            var ol = (UInt64)0;
+                            ol = MathEx.ShiftRight(ol, lo, unchecked(-e), out lo);
+                            // IEEE Std 754-2008 roundTiesToEven
+                            if (unchecked((UInt64)Int64.MinValue) < ol || (unchecked((UInt64)Int64.MinValue) == ol && 0 != (1 & lo))) {
+                                lo = unchecked(1 + lo);
+                            }
+                        }
+                        if (0 > b) {
+                            lo = MathEx.NegateUnchecked(lo, hi, out hi);
+                        }
+                        return new UInt128(lo, hi);
+                    }
+                }
+                return Zero;
+            }
+
+            [System.CLSCompliantAttribute(false)]
+            [System.Runtime.ConstrainedExecution.ReliabilityContractAttribute(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.MayFail)]
+            [System.Runtime.TargetedPatchingOptOutAttribute(null)]
+            [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+            [System.Diagnostics.Contracts.PureAttribute()]
+            public static UInt128 ToUInt128(float value) {
+                return ToUInt128(unchecked((double)value));
             }
         }
     }

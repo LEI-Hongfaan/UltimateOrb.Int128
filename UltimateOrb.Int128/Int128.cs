@@ -734,9 +734,13 @@ namespace UltimateOrb {
                     } else if (e < 0) {
                         var ol = (UInt64)0;
                         ol = MathEx.ShiftRight(ol, lo, unchecked(-e), out lo);
+                        // Do NOT uncomment. (int)3.5 == 3
+                        /*
+                        // IEEE Std 754-2008 roundTiesToEven
                         if (unchecked((UInt64)Int64.MinValue) < ol || (unchecked((UInt64)Int64.MinValue) == ol && 0 != (1 & lo))) {
                             lo = unchecked(1 + lo);
                         }
+                        */
                     }
                     if (0 > b) {
                         lo = MathEx.NegateUnchecked(lo, hi, out hi);
@@ -1459,6 +1463,60 @@ namespace UltimateOrb {
                 return new Int128(lo, unchecked((Int64)hi));
             }
         }
+
+        public static partial class Converter {
+
+            [System.Runtime.ConstrainedExecution.ReliabilityContractAttribute(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.MayFail)]
+            [System.Runtime.TargetedPatchingOptOutAttribute(null)]
+            [System.Diagnostics.Contracts.PureAttribute()]
+            public static Int128 ToInt128(double value) {
+                const int BitSize = 64;
+                const int ExponentBitSize = 11;
+                const int ExponentBias = unchecked(checked((1 << (ExponentBitSize - 1))) - 1);
+                const int SignBitSize = 1;
+                const int FractionBitSize = checked(BitSize - SignBitSize - ExponentBitSize);
+
+                // const Int64 SignMask = unchecked((Int64)checked((Int64)1u << (ExponentBitSize + FractionBitSize)));
+                const Int64 ExponentMask = unchecked((Int64)checked((((Int64)1u << ExponentBitSize) - 1u) << FractionBitSize));
+                const Int64 FractionMask = unchecked((Int64)checked(((Int64)1u << FractionBitSize) - 1u));
+
+                var b = BitConverter.DoubleToInt64Bits(value);
+                var e = checked((int)(ExponentMask >> FractionBitSize)) & unchecked((int)(b >> FractionBitSize));
+                if (e >= checked(ExponentBias - 1)) {
+                    if (e < checked(ExponentBias - 1 + 128)) {
+                        e = unchecked(e - (FractionBitSize + ExponentBias));
+                        var lo = unchecked((UInt64)(((Int64)1 << FractionBitSize) | (FractionMask & b)));
+                        var hi = (Int64)0;
+                        if (e > 0) {
+                            lo = MathEx.ShiftLeft(lo, hi, e, out hi);
+                        } else if (e < 0) {
+                            var ol = (UInt64)0;
+                            ol = MathEx.ShiftRight(ol, lo, unchecked(-e), out lo);
+                            // IEEE Std 754-2008 roundTiesToEven
+                            if (unchecked((UInt64)Int64.MinValue) < ol || (unchecked((UInt64)Int64.MinValue) == ol && 0 != (1 & lo))) {
+                                lo = unchecked(1 + lo);
+                            }
+                        }
+                        if (0 > b) {
+                            lo = MathEx.NegateUnchecked(lo, hi, out hi);
+                        }
+                        return new Int128(lo, hi);
+                    }
+                    // check overflow
+                    checked(0 - unchecked((UInt64)((Int64)0xC7E0000000000000 - b))).Ignore();
+                    return MinValue;
+                }
+                return Zero;
+            }
+
+            [System.Runtime.ConstrainedExecution.ReliabilityContractAttribute(System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, System.Runtime.ConstrainedExecution.Cer.MayFail)]
+            [System.Runtime.TargetedPatchingOptOutAttribute(null)]
+            [System.Runtime.CompilerServices.MethodImplAttribute(System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
+            [System.Diagnostics.Contracts.PureAttribute()]
+            public static Int128 ToInt128(float value) {
+                return ToInt128(unchecked((double)value));
+            }
+        }
     }
 }
 
@@ -1470,7 +1528,6 @@ namespace Internal.System {
 
     public static partial class Converter {
 
-        [global::System.CLSCompliantAttribute(false)]
         [global::System.Runtime.ConstrainedExecution.ReliabilityContractAttribute(global::System.Runtime.ConstrainedExecution.Consistency.WillNotCorruptState, global::System.Runtime.ConstrainedExecution.Cer.Success)]
         [global::System.Runtime.TargetedPatchingOptOutAttribute(null)]
         [global::System.Runtime.CompilerServices.MethodImplAttribute(global::System.Runtime.CompilerServices.MethodImplOptions.AggressiveInlining)]
